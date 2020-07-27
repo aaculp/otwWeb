@@ -26,7 +26,8 @@
     height: 50vh;
     padding: 0;
 }
-.navLink  {
+
+.navLink {
     width: 100%;
 }
 
@@ -39,8 +40,16 @@
     color: yellow;
 }
 
-.mapBackground {
-    background-color: blue;
+.scrollFeed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 50vw;
+}
+
+.feedBackground {
+    background-color: darkgreen;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,10 +57,23 @@
     height: 100vh;
 }
 
-.scrollFeed {
+.feedContainer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 50vw;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    bottom: 40%;
+    width: 100%;
+    height: 20%;
 }

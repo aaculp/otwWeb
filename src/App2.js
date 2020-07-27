@@ -49,32 +49,21 @@ const routes = [
 ];
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      lat: null,
-      long: null
-    };
-  }
-
-  getUserCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState(state => {
-          return {
-            lat: position.coords.latitude,
-            long: position.coords.longitude
-          };
-        });
-      },
-      err => console.log(err)
-    );
+  state = {
+    lat: null,
+    long: null,
+    venues: [],
+    buttonInput: null
   };
 
   componentDidMount() {
-    // get user location
-    this.getUserCurrentLocation();
-    console.log(this.state);
+    navigator.geolocation.getCurrentPosition(position =>
+      this.setState({
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      }),
+      console.log(this.state)
+    );
   }
 
   render() {

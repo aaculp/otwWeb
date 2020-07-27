@@ -7,7 +7,7 @@ import Food from "./components/Food";
 import Restaurants from "./components/Restaurants";
 import Bar from "./components/Bar";
 import Parking from "./components/Parking";
-import ScrollFeed from "./components/ScrollFeed";
+import MapBox from "./components/MapBox";
 
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -49,6 +49,34 @@ const routes = [
 ];
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      lat: null,
+      long: null
+    };
+  }
+
+  getUserCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState(state => {
+          return {
+            lat: position.coords.latitude,
+            long: position.coords.longitude
+          };
+        });
+      },
+      err => console.log(err)
+    );
+  };
+
+  componentDidMount() {
+    // get user location
+    this.getUserCurrentLocation();
+    console.log(this.state);
+  }
+
   render() {
     return (
       <Router>
@@ -82,8 +110,8 @@ export default class App extends Component {
               ))}
             </Switch>
           </div>
-          
-          <ScrollFeed />
+
+          <MapBox />
 
           <div className="mapBackground" style={{ flex: 1, padding: "10px" }}>
             <Switch>

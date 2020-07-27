@@ -4,8 +4,9 @@ function Form(props) {
   return (
     <form className="input" onSubmit={e => props.onFormSubmit(e)}>
       <input
+        placeholder={props.name}
         onChange={e => props.handleInputChange(e)}
-        value={props.name.toUpperCase()}
+        value={props.butonInput}
       />
       <button>Submit</button>
     </form>

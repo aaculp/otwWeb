@@ -2,6 +2,7 @@ import React from "react";
 import Form from "./Form";
 
 export default function Feed(props) {
+    console.log(props)
   return (
     <div className="feedContainer">
       <div className="searchContainer">

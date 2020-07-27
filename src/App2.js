@@ -60,30 +60,66 @@ export default class App extends Component {
         path: "/",
         exact: true,
         sidebar: () => <div>Home</div>,
-        main: props => <Feed name="Home" buttonInput={this.state.buttonInput} handleInputChange={this.handleInputChange} />
+        main: props => (
+          <Feed
+            name="Home"
+            {...props}
+            buttonInput={this.state.buttonInput}
+            handleInputChange={this.handleInputChange}
+            onFormSubmit={this.onFormSubmit}
+          />
+        )
       },
       {
         path: "/food",
         sidebar: () => <div>Food</div>,
-        main: props => <Feed name="Food" buttonInput={this.state.buttonInput} handleInputChange={this.handleInputChange} />
+        main: props => (
+          <Feed
+            name="Food"
+            {...props}
+            buttonInput={this.state.buttonInput}
+            handleInputChange={this.handleInputChange}
+            onFormSubmit={this.onFormSubmit}
+          />
+        )
       },
       {
         path: "/restaurants",
         sidebar: () => <div>Restaurants</div>,
         main: props => (
-          <Feed name="Restaurants" buttonInput={this.state.buttonInput} handleInputChange={this.handleInputChange} />
+          <Feed
+            name="Restaurants"
+            {...props}
+            buttonInput={this.state.buttonInput}
+            handleInputChange={this.handleInputChange}
+            onFormSubmit={this.onFormSubmit}
+          />
         )
       },
       {
         path: "/bars",
         sidebar: () => <div>Bar</div>,
-        main: props => <Feed name="Bar" buttonInput={this.state.buttonInput} handleInputChange={this.handleInputChange} />
+        main: props => (
+          <Feed
+            name="Bar"
+            {...props}
+            buttonInput={this.state.buttonInput}
+            handleInputChange={this.handleInputChange}
+            onFormSubmit={this.onFormSubmit}
+          />
+        )
       },
       {
         path: "/parking",
         sidebar: () => <div>Parking</div>,
         main: props => (
-          <Feed name="Parking" buttonInput={this.state.buttonInput} handleInputChange={this.handleInputChange} />
+          <Feed
+            name="Parking"
+            {...props}
+            buttonInput={this.state.buttonInput}
+            handleInputChange={this.handleInputChange}
+            onFormSubmit={this.onFormSubmit}
+          />
         )
       }
     ]
@@ -100,25 +136,24 @@ export default class App extends Component {
     );
   }
 
-  onFormSubmit = e => {
-    e.preventDefault();
-    // let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=40.740,-73.991&query=${this.state.buttonInput}`;
-    // fetch(url)
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     // this.setState({
-    //     //   venues: data.response.venues,
-    //     //   venueId: data.response.venues[0].id
-    //     // });
-    //   });
-  };
-
   handleInputChange = e => {
     this.setState({
       buttonInput: e.target.value
     });
-    console.log(this.state.buttonInput)
+  };
+
+  onFormSubmit = e => {
+    e.preventDefault();
+    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=40.740,-73.991&query=${this.state.buttonInput}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        // this.setState({
+        //   venues: data.response.venues,
+        //   venueId: data.response.venues[0].id
+        // });
+      })
   };
 
   render() {

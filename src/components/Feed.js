@@ -1,19 +1,33 @@
-import React from "react";
-import Form from "./Form";
+import React, { Component } from "react";
 
-export default function Feed(props) {
-    console.log(props)
-  return (
-    <div className="feedContainer">
-      <div className="searchContainer">
-        <h2>{props.name}</h2>
-        <Form
-          handleInputChange={props.handleInputChange}
-          onFormSubmit={props.onFormSubmit}
-          buttonInput={props.buttonInput}
-          name={props.name}
-        />
+import Form from "./Form";
+import VenueDetails from "./VenueDetails";
+
+export default class Feed extends Component {
+  render() {
+    let allVenues = this.props.venues.map(venue => (
+      <VenueDetails
+        key={venue.id}
+        venue={venue}
+        onClick={id => this.handleChange(id)}
+      />
+    ));
+    return (
+      <div className="feedContainer">
+        <div className="searchContainer">
+          <h2>{this.props.name}</h2>
+          <Form
+            handleInputChange={this.props.handleInputChange}
+            onFormSubmit={this.props.onFormSubmit}
+            buttonInput={this.props.buttonInput}
+            name={this.props.name}
+          />
+        </div>
+
+        <div className='venueContainer'>
+            {allVenues}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

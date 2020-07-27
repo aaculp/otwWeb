@@ -54,6 +54,7 @@ export default class App extends Component {
     lat: null,
     long: null,
     venues: [],
+    venueId: null,
     buttonInput: null,
     routes: [
       {
@@ -63,7 +64,8 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Home"
-            {...props}
+            venues={this.state.venues}
+            venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
             onFormSubmit={this.onFormSubmit}
@@ -76,7 +78,8 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Food"
-            {...props}
+            venues={this.state.venues}
+            venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
             onFormSubmit={this.onFormSubmit}
@@ -89,7 +92,8 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Restaurants"
-            {...props}
+            venues={this.state.venues}
+            venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
             onFormSubmit={this.onFormSubmit}
@@ -102,7 +106,8 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Bar"
-            {...props}
+            venues={this.state.venues}
+            venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
             onFormSubmit={this.onFormSubmit}
@@ -115,7 +120,8 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Parking"
-            {...props}
+            venues={this.state.venues}
+            venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
             onFormSubmit={this.onFormSubmit}
@@ -132,7 +138,6 @@ export default class App extends Component {
           lat: position.coords.latitude,
           long: position.coords.longitude
         }),
-      console.log(this.state)
     );
   }
 
@@ -144,15 +149,15 @@ export default class App extends Component {
 
   onFormSubmit = e => {
     e.preventDefault();
-    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=40.740,-73.991&query=${this.state.buttonInput}`;
+    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=40.740,-73.991&query=${this.state.buttonInput}&limit=50`;
     fetch(url)
       .then(res => res.json())
       .then(data => {
         console.log(data);
-        // this.setState({
-        //   venues: data.response.venues,
-        //   venueId: data.response.venues[0].id
-        // });
+        this.setState({
+          venues: data.response.venues,
+          venueId: data.response.venues[0].id
+        });
       })
   };
 

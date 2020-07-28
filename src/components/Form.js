@@ -1,16 +1,30 @@
-import React from "react";
+import React, { Component } from "react";
 
-function Form(props) {
-  return (
-    <form className="input" onSubmit={e => props.onFormSubmit(e)}>
-      <input
-        placeholder={props.name}
-        onChange={e => props.handleInputChange(e)}
-        value={props.butonInput}
-      />
-      <button>Submit</button>
-    </form>
-  );
+export default class Form extends Component {
+  render() {
+    return (
+      <div>
+        {this.props.name === "Trending" ? (
+          <form className="input" onSubmit={e => this.props.onTrendingSubmit(e)}>
+            <input
+              placeholder={this.props.name}
+              onChange={e => this.props.handleInputChange(e)}
+              value={this.props.butonInput}
+            />
+            <button>Submit</button>
+          </form>
+        ) : (
+          <form className="input" onSubmit={e => this.props.onFormSubmit(e)}>
+            <input
+              placeholder={this.props.name}
+              onChange={e => this.props.handleInputChange(e)}
+              value={this.props.butonInput}
+            />
+            <button>Submit</button>
+          </form>
+        )}
+      </div>
+    );
+  }
 }
 
-export default Form;

@@ -4,11 +4,6 @@ import Form from "./Form";
 import VenueDetails from "./VenueDetails";
 
 export default class Feed extends Component {
-
-//   componentDidMount() {
-//     this.props.onPageLoad();
-//   }
-
   render() {
     let allVenues = this.props.venues.map(venue => (
       <VenueDetails
@@ -17,6 +12,7 @@ export default class Feed extends Component {
         onClick={id => this.handleChange(id)}
       />
     ));
+
     return (
       <div className="feedContainer">
         <div className="searchContainer">

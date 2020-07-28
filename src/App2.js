@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 // import Parking from "./components/Parking";
 import MapBox from "./components/MapBox";
 import Feed from "./components/Feed";
+import TrendingDetails from "./components/TrendingDetails";
 
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -54,28 +55,25 @@ export default class App extends Component {
     lat: null,
     long: null,
     venues: [],
+    trendingVenues: [],
     venueId: null,
     buttonInput: null,
     routes: [
       {
         path: "/",
         exact: true,
-        sidebar: () => <div>Home</div>,
         main: props => (
-          <Feed
+          <TrendingDetails
             name="Trending"
-            venues={this.state.venues}
-            venueId={this.state.venueId}
+            trendingVenues={this.state.trendingVenues}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
-            onFormSubmit={this.onFormSubmit}
-            onPageLoad={this.onPageLoad}
+            onTrendingSubmit={this.onTrendingSubmit}
           />
         )
       },
       {
         path: "/food",
-        sidebar: () => <div>Food</div>,
         main: props => (
           <Feed
             name="Food"
@@ -89,7 +87,6 @@ export default class App extends Component {
       },
       {
         path: "/restaurants",
-        sidebar: () => <div>Restaurants</div>,
         main: props => (
           <Feed
             name="Restaurants"
@@ -103,7 +100,6 @@ export default class App extends Component {
       },
       {
         path: "/bars",
-        sidebar: () => <div>Bar</div>,
         main: props => (
           <Feed
             name="Bar"
@@ -117,7 +113,6 @@ export default class App extends Component {
       },
       {
         path: "/parking",
-        sidebar: () => <div>Parking</div>,
         main: props => (
           <Feed
             name="Parking"
@@ -133,12 +128,13 @@ export default class App extends Component {
   };
 
   componentDidMount = e => {
-      this.onPageLoad()
+    this.watchPositionID = navigator.geolocation.watchPosition(position => {
       this.setState({
-          lat: this.state.lat,
-          long: this.state
-      })
-  }
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      });
+    });
+  };
 
   handleInputChange = e => {
     this.setState({
@@ -146,22 +142,22 @@ export default class App extends Component {
     });
   };
 
-  onPageLoad = e => {
-    this.watchPositionID = navigator.geolocation.watchPosition(position => {
-      this.setState({
-        lat: position.coords.latitude,
-        long: position.coords.longitude
-      });
-      let url = `https://api.foursquare.com/v2/venues/trending?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.lat},${this.state.long}&radius=100&limit=10`;
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          console.log("data for trending",data);
-          // this.setState({
-          //   venues: data.response.venues,
-          // });
+  onTrendingSubmit = e => {
+    e.preventDefault();
+    let url = `https://api.foursquare.com/v2/venues/trending?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.lat},${this.state.long}&query=${this.state.buttonInput}&limit=50`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log("data for venues", data);
+        this.setState({
+          trendingVenues: data.response.venues
         });
-    });
+      })
+      .catch(err => {
+        alert(
+          "Sorry we can find what you're looking for, try a different venue!"
+        );
+      });
   };
 
   onFormSubmit = e => {
@@ -170,11 +166,16 @@ export default class App extends Component {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        // console.log(data);
+        console.log("data for venues", data);
         this.setState({
           venues: data.response.venues,
           venueId: data.response.venues[0].id
         });
+      })
+      .catch(err => {
+        alert(
+          "Sorry we can find what you're looking for, try a different venue!"
+        );
       });
   };
 
@@ -184,8 +185,9 @@ export default class App extends Component {
         <div className="AppContainer">
           <div className="leftBar">
             <ul className="leftBarLinks">
+                {/* THIS IS THE HTML FOR NAV LINKS  */}
               <li className="navLink">
-                <Link to="/food">Food</Link>
+                <Link to="/food">Fast Food</Link>
               </li>
               <li className="navLink">
                 <Link to="/restaurants">Restaurants</Link>

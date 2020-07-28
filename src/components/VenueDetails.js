@@ -5,7 +5,6 @@ function VenueDetails(props) {
   //     props.onClick(id);
   //     console.log(`this is id`, id);
   //   }
-  console.log(props.venue);
 
   return (
     <div className="venues">
@@ -13,7 +12,7 @@ function VenueDetails(props) {
       <div className="venue-info">
         <p className="venue-info">Address: {props.venue.location.address}, {props.venue.location.city}, {props.venue.location.state}</p>
         <p className="venue-checkin">Venue Summary: {props.venue.hereNow.summary}</p>
-        <p className="venue-checkin">Users Checked-in: {props.venue.stats.checkinsCount}</p>
+        <p className="venue-checkin">Users Checked-in: {props.venue.hereNow.count}</p>
       </div>
     </div>
   );

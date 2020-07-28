@@ -132,6 +132,14 @@ export default class App extends Component {
     ]
   };
 
+  componentDidMount = e => {
+      this.onPageLoad()
+      this.setState({
+          lat: this.state.lat,
+          long: this.state
+      })
+  }
+
   handleInputChange = e => {
     this.setState({
       buttonInput: e.target.value
@@ -204,7 +212,7 @@ export default class App extends Component {
             </Switch>
           </div>
 
-          <MapBox />
+          <MapBox lat={this.state.lat} long={this.state.long} />
 
           <div className="feedBackground" style={{ flex: 1 }}>
             <Switch>

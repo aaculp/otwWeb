@@ -63,12 +63,13 @@ export default class App extends Component {
         sidebar: () => <div>Home</div>,
         main: props => (
           <Feed
-            name="Home"
+            name="Trending"
             venues={this.state.venues}
             venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
             handleInputChange={this.handleInputChange}
             onFormSubmit={this.onFormSubmit}
+            onPageLoad={this.onPageLoad}
           />
         )
       },
@@ -131,34 +132,42 @@ export default class App extends Component {
     ]
   };
 
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      position =>
-        this.setState({
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }),
-    );
-  }
-
   handleInputChange = e => {
     this.setState({
       buttonInput: e.target.value
     });
   };
 
+  onPageLoad = e => {
+    this.watchPositionID = navigator.geolocation.watchPosition(position => {
+      this.setState({
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      });
+      let url = `https://api.foursquare.com/v2/venues/trending?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.lat},${this.state.long}&radius=100&limit=10`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          console.log("data for trending",data);
+          // this.setState({
+          //   venues: data.response.venues,
+          // });
+        });
+    });
+  };
+
   onFormSubmit = e => {
     e.preventDefault();
-    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=40.740,-73.991&query=${this.state.buttonInput}&limit=50`;
+    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.lat},${this.state.long}&query=${this.state.buttonInput}&limit=50`;
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         this.setState({
           venues: data.response.venues,
           venueId: data.response.venues[0].id
         });
-      })
+      });
   };
 
   render() {

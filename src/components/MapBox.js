@@ -18,7 +18,7 @@ class Mapbox extends Component {
       height: "100vh",
       latitude: 40.74,
       longitude: -73.991,
-      zoom: 12
+      zoom: 13
     }
   };
 
@@ -34,12 +34,11 @@ class Mapbox extends Component {
     )
   }
 
-  _onViewportChange = viewport => this.setState({ viewport });
-
   render() {
+    const { viewport } = this.state
     return (
       <ReactMapGL
-        {...this.state.viewport}
+        {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         // mapStyle="mapbox://styles/mapbox/streets-v10"
         onViewportChange={viewport => this.setState({ viewport })}

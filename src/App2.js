@@ -52,8 +52,8 @@ import TrendingDetails from "./components/TrendingDetails";
 
 export default class App extends Component {
   state = {
-    lat: null,
-    long: null,
+    latitude: null,
+    longitude: null,
     venues: [],
     trendingVenues: [],
     venueId: null,
@@ -77,6 +77,7 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Food"
+            {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
@@ -90,6 +91,7 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Restaurants"
+            {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
@@ -103,6 +105,7 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Bar"
+            {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
@@ -116,6 +119,7 @@ export default class App extends Component {
         main: props => (
           <Feed
             name="Parking"
+            {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
             buttonInput={this.state.buttonInput}
@@ -127,14 +131,24 @@ export default class App extends Component {
     ]
   };
 
-  componentDidMount = e => {
-    this.watchPositionID = navigator.geolocation.watchPosition(position => {
-      this.setState({
-        lat: position.coords.latitude,
-        long: position.coords.longitude
-      });
-    });
-  };
+  componentDidMount() {
+    window.navigator.geolocation.getCurrentPosition(
+      position =>
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }),
+      err => console.log("Error", err)
+    );
+    // window.navigator.geolocation.watchPosition(
+    //   position =>
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude
+    //     }),
+    //   err => console.log("Error", err)
+    // );
+  }
 
   handleInputChange = e => {
     this.setState({
@@ -144,7 +158,7 @@ export default class App extends Component {
 
   onTrendingSubmit = e => {
     e.preventDefault();
-    let url = `https://api.foursquare.com/v2/venues/trending?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.lat},${this.state.long}&query=${this.state.buttonInput}&radius=100&limit=50`;
+    let url = `https://api.foursquare.com/v2/venues/trending?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.latitude},${this.state.longitude}&query=${this.state.buttonInput}&radius=100&limit=50`;
     fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -162,14 +176,16 @@ export default class App extends Component {
 
   onFormSubmit = e => {
     e.preventDefault();
-    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.lat},${this.state.long}&query=${this.state.buttonInput}&limit=50`;
+    let url = `https://api.foursquare.com/v2/venues/search?client_id=ST23AEQHHZXZSAVCBLBO4KZQZVA0KXNULNFPAVHFKMJLZ0OY&client_secret=NN3W2M14CHEJ2BCF21ORXCWWA5VYMXAWQYXTWG5414LU2RX0&v=20180323&ll=${this.state.latitude},${this.state.longitude}&query=${this.state.buttonInput}&limit=50`;
     fetch(url)
       .then(res => res.json())
       .then(data => {
         console.log("data for venues", data);
         this.setState({
           venues: data.response.venues,
-          venueId: data.response.venues[0].id
+          venueId: data.response.venues[0].id,
+          latitude: this.state.latitude,
+          longitude: this.state.longitude
         });
       })
       .catch(err => {
@@ -185,7 +201,7 @@ export default class App extends Component {
         <div className="AppContainer">
           <div className="leftBar">
             <ul className="leftBarLinks">
-                {/* THIS IS THE HTML FOR NAV LINKS  */}
+              {/* THIS IS THE HTML FOR NAV LINKS  */}
               <li className="navLink">
                 <Link to="/food">Fast Food</Link>
               </li>

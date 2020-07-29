@@ -47,7 +47,7 @@ class Mapbox extends Component {
       height: "100vh",
       latitude: 40.74,
       longitude: -73.991,
-      zoom: 12
+      zoom: 13
     },
     venues: []
   };
@@ -71,6 +71,13 @@ class Mapbox extends Component {
     );
   }
 
+  // controls zoom level on location press
+  _onViewportChange = viewport => {
+    viewport.zoom = 12;
+    this.setState({ viewport });
+  };
+
+  // updates the list of venues for map pins
   componentDidUpdate(prevProps) {
     let propsVenues = this.props.venues;
     if (propsVenues !== prevProps.venues) {
@@ -95,6 +102,7 @@ class Mapbox extends Component {
             timeout: 200,
             maximumAge: 1000
           }}
+          onViewportChange={this._onViewportChange}
           trackUserLocation={true}
         />
         <Markers venuePing={this.state.venues} />

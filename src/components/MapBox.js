@@ -1,5 +1,6 @@
 import React, { Component, PureComponent } from "react";
 import ReactMapGL, { GeolocateControl, Marker } from "react-map-gl";
+import PinDrop from "../assets/pindrop.png";
 
 let MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWFyb25jdWxwIiwiYSI6ImNqbmRheXl1MzBjZ2Eza280eGJkNjU2ZGwifQ.roPV61S5Vnt7Eu2oKRp7ZQ";
@@ -15,25 +16,25 @@ const geolocateStyle = {
 class Markers extends PureComponent {
   state = {
     venueDrops: []
-  }
+  };
   componentDidUpdate(prevProps) {
     let venuePing = this.props.venuePing;
     if (venuePing !== prevProps.venues) {
-      this.setState({ 
+      this.setState({
         venueDrops: this.props.venuePing
       });
     }
   }
 
   render() {
-    const { venueDrops } = this.state
+    const { venueDrops } = this.state;
     return venueDrops.map(ping => (
       <Marker
         key={ping.id}
         longitude={ping.location.lng}
         latitude={ping.location.lat}
       >
-        <img src="pin.png" />
+        <img src={PinDrop} style={{ width: "50px" }} />
       </Marker>
     ));
   }
@@ -46,7 +47,7 @@ class Mapbox extends Component {
       height: "100vh",
       latitude: 40.74,
       longitude: -73.991,
-      zoom: 10
+      zoom: 12
     },
     venues: []
   };

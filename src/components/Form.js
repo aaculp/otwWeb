@@ -18,7 +18,6 @@ export default class Form extends Component {
             <input
               placeholder={this.props.name}
               onChange={e => this.props.handleInputChange(e)}
-              value={this.props.butonInput}
             />
             <button>Submit</button>
           </form>

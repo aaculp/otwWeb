@@ -140,14 +140,14 @@ export default class App extends Component {
         }),
       err => console.log("Error", err)
     );
-    // window.navigator.geolocation.watchPosition(
-    //   position =>
-    //     this.setState({
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude
-    //     }),
-    //   err => console.log("Error", err)
-    // );
+    window.navigator.geolocation.watchPosition(
+      position =>
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }),
+      err => console.log("Error", err)
+    );
   }
 
   handleInputChange = e => {
@@ -162,7 +162,7 @@ export default class App extends Component {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log("data for venues", data);
+        // console.log("data for trending venues", data);
         this.setState({
           trendingVenues: data.response.venues
         });
@@ -180,7 +180,7 @@ export default class App extends Component {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log("data for venues", data);
+        // console.log("data for venues", data);
         this.setState({
           venues: data.response.venues,
           venueId: data.response.venues[0].id,
@@ -230,7 +230,7 @@ export default class App extends Component {
             </Switch>
           </div>
 
-          <MapBox lat={this.state.lat} long={this.state.long} />
+          <MapBox lat={this.state.lat} long={this.state.long} venues={this.state.venues} onFormSubmit={this.onFormSubmit} />
 
           <div className="feedBackground" style={{ flex: 1 }}>
             <Switch>

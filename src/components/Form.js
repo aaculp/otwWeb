@@ -6,12 +6,12 @@ export default class Form extends Component {
       <div>
         {this.props.name === "Trending" ? (
           <form className="input" onSubmit={e => this.props.onTrendingSubmit(e)}>
-            <input
+            {/* <input
               placeholder={this.props.name}
               onChange={e => this.props.handleInputChange(e)}
               value={this.props.butonInput}
             />
-            <button>Submit</button>
+            <button>Submit</button> */}
           </form>
         ) : (
           <form className="input" onSubmit={e => this.props.onFormSubmit(e)}>

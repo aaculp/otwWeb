@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import Form from "./Form";
 
 export default class TrendingDetails extends Component {
-  state = {
-    trendingVenues: null
-  };
-
   componentDidMount() {
       console.log({...this.props})
   }

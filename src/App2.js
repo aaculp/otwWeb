@@ -232,7 +232,7 @@ export default class App extends Component {
 
           <MapBox lat={this.state.lat} long={this.state.long} venues={this.state.venues} onFormSubmit={this.onFormSubmit} />
 
-          <div className="feedBackground" style={{ flex: 1 }}>
+          <div className="feedBackground">
             <Switch>
               {this.state.routes.map((route, index) => (
                 // Render more <Route>s with the same paths as

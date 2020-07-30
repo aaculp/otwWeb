@@ -9,7 +9,8 @@ const geolocateStyle = {
   position: "absolute",
   top: 0,
   left: 0,
-  margin: 10
+  margin: 10,
+  zIndex: 11
 };
 
 // PureComponent ensures that the markers are only rerendered when data changes
@@ -43,8 +44,8 @@ class Markers extends PureComponent {
 class Mapbox extends Component {
   state = {
     viewport: {
-      width: "50vw",
-      height: "100vh",
+      width: "50%",
+      height: "100%",
       latitude: 40.74,
       longitude: -73.991,
       zoom: 13
@@ -81,7 +82,7 @@ class Mapbox extends Component {
   componentDidUpdate(prevProps) {
     let propsVenues = this.props.venues;
     if (propsVenues !== prevProps.venues) {
-      this.setState({ venues: this.props.venues });
+      this.setState({ venues: this.props.venues, width: window.innerWidth / 2 });
     }
   }
 

@@ -1,10 +1,10 @@
 import React from "react";
 
 function VenueDetails(props) {
-  //   function favoriteVenue(id) {
-  //     props.onClick(id);
-  //     console.log(`this is id`, id);
-  //   }
+  // function favoriteVenue(id) {
+  //   props.onClick(id);
+  //   console.log(`this is id`, id);
+  // }
 
   return (
     <div className="venues">

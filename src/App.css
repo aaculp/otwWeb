@@ -12,27 +12,36 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: red;
+    background-color: #454545;
     height: 100%;
     width: 15%;
+}
+
+.ovalNavBackground {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    height: 400px;
+    width: 100px;
+    padding: 0 10px;
+    border-radius: 50px;
+    margin-top: 25px;
 }
 
 .leftBarLinks {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
     list-style-type: none;
     height: 50%;
     padding: 0;
 }
 
-.navLink {
-    width: 100%;
-}
-
 .navLink a {
-    text-align: left;
+    text-align: center;
     color: white;
 }
 
@@ -49,7 +58,7 @@
 }
 
 .feedBackground {
-    background-color: darkgreen;
+    background-color: #454545;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,11 +84,10 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    background-color: darkgreen;
+    background-color: #454545;
     top: 0;
-    width: 100%;
+    width: 35%;
     height: 20%;
-    z-index: 2;
 }
 
 .venueContainer {
@@ -91,7 +99,6 @@
     position: absolute;
     top: 120px;
     width: 95%;
-    z-index: 1;
 }
 
 .venues {
@@ -102,8 +109,4 @@
 .venue-name {
     font-weight: bold;
     font-size: 20px;
-}
-
-.mapboxgl-map {
-    z-index: 10;
 }

@@ -42,16 +42,9 @@ export default class Feed extends Component {
       <div className="venues" key={loaded.id}>
         <span className="venue-name">{loaded.name}</span>
         <div className="venue-info">
-          <p className="venue-info">
-            Address: {loaded.location.address}, {loaded.location.city},{" "}
-            {loaded.location.state}
-          </p>
-          <p className="venue-checkin">
-            Venue Summary: {loaded.hereNow.summary}
-          </p>
-          <p className="venue-checkin">
-            Users Checked-in: {loaded.hereNow.count}
-          </p>
+          <p className="venue-info">Address: {loaded.location.address}, {loaded.location.city},{loaded.location.state}</p>
+          <p className="venue-checkin">Venue Summary: {loaded.hereNow.summary}</p>
+          <p className="venue-checkin">Users Checked-in: {loaded.hereNow.count}</p>
         </div>
       </div>
     ));

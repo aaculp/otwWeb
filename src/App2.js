@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import MapBox from "./components/MapBox";
 import Feed from "./components/Feed";
 import TrendingDetails from "./components/TrendingDetails";
+import Nav from "./components/Nav";
 
 // Each logical "route" has two components, one for
 // the sidebar and one for the main area. We want to
@@ -76,7 +77,7 @@ export default class App extends Component {
         path: "/food",
         main: props => (
           <Feed
-            name="Food"
+            name="food"
             {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
@@ -90,7 +91,7 @@ export default class App extends Component {
         path: "/restaurants",
         main: props => (
           <Feed
-            name="Restaurants"
+            name="restaurants"
             {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
@@ -104,7 +105,7 @@ export default class App extends Component {
         path: "/bars",
         main: props => (
           <Feed
-            name="Bar"
+            name="bar"
             {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
@@ -118,7 +119,7 @@ export default class App extends Component {
         path: "/parking",
         main: props => (
           <Feed
-            name="Parking"
+            name="parking"
             {...this.state}
             venues={this.state.venues}
             venueId={this.state.venueId}
@@ -140,14 +141,14 @@ export default class App extends Component {
         }),
       err => console.log("Error", err)
     );
-    window.navigator.geolocation.watchPosition(
-      position =>
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }),
-      err => console.log("Error", err)
-    );
+    // window.navigator.geolocation.watchPosition(
+    //   position =>
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude
+    //     }),
+    //   err => console.log("Error", err)
+    // );
   }
 
   handleInputChange = e => {
@@ -200,21 +201,7 @@ export default class App extends Component {
       <Router>
         <div className="AppContainer">
           <div className="leftBar">
-            <ul className="leftBarLinks">
-              {/* THIS IS THE HTML FOR NAV LINKS  */}
-              <li className="navLink">
-                <Link to="/food">Fast Food</Link>
-              </li>
-              <li className="navLink">
-                <Link to="/restaurants">Restaurants</Link>
-              </li>
-              <li className="navLink">
-                <Link to="/bars">Bars</Link>
-              </li>
-              <li className="navLink">
-                <Link to="/parking">Parking</Link>
-              </li>
-            </ul>
+            <Nav {...this.state} />
 
             <Switch>
               {this.state.routes.map((route, index) => (
@@ -230,9 +217,7 @@ export default class App extends Component {
             </Switch>
           </div>
 
-          <MapBox lat={this.state.lat} long={this.state.long} venues={this.state.venues} onFormSubmit={this.onFormSubmit} />
-
-          <div className="feedBackground">
+          <div className="MainContentColumn">
             <Switch>
               {this.state.routes.map((route, index) => (
                 // Render more <Route>s with the same paths as
@@ -245,6 +230,13 @@ export default class App extends Component {
                 />
               ))}
             </Switch>
+
+            <MapBox
+              lat={this.state.lat}
+              long={this.state.long}
+              venues={this.state.venues}
+              onFormSubmit={this.onFormSubmit}
+            />
           </div>
         </div>
       </Router>

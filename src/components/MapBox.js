@@ -17,6 +17,7 @@ class Markers extends PureComponent {
   state = {
     venueDrops: []
   };
+
   componentDidUpdate(prevProps) {
     let venuePing = this.props.venuePing;
     if (venuePing !== prevProps.venues) {
@@ -43,8 +44,8 @@ class Markers extends PureComponent {
 class Mapbox extends Component {
   state = {
     viewport: {
-      width: "50%",
-      height: "100%",
+      width: "100%",
+      height: "65%",
       latitude: 40.74,
       longitude: -73.991,
       zoom: 13
@@ -61,14 +62,14 @@ class Mapbox extends Component {
         }),
       err => console.log("Error", err)
     );
-    window.navigator.geolocation.watchPosition(
-      position =>
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }),
-      err => console.log("Error", err)
-    );
+    // window.navigator.geolocation.watchPosition(
+    //   position =>
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude
+    //     }),
+    //   err => console.log("Error", err)
+    // );
   }
 
   // controls zoom level on location press

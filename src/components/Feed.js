@@ -29,6 +29,12 @@ export default class Feed extends Component {
       });
   };
 
+  componentDidUpdate(props) {
+    let links = document.querySelectorAll(`.leftNavLink`);
+    console.log(links)
+    links.forEach(link => link.className += "" + "active")
+  }
+
   render() {
     let allVenues = this.props.venues.map(venue => (
       <VenueDetails
@@ -38,21 +44,21 @@ export default class Feed extends Component {
       />
     ));
 
-    let venuesOnLoad = this.state.loadedVenues.map(loaded => (
-      <div className="venues" key={loaded.id}>
-        <span className="venue-name">{loaded.name}</span>
-        <div className="venue-info">
-          <p className="venue-info">Address: {loaded.location.address}, {loaded.location.city},{loaded.location.state}</p>
-          <p className="venue-checkin">Venue Summary: {loaded.hereNow.summary}</p>
-          <p className="venue-checkin">Users Checked-in: {loaded.hereNow.count}</p>
-        </div>
-      </div>
-    ));
+    // let venuesOnLoad = this.state.loadedVenues.map(loaded => (
+    //   <div className="venues" key={loaded.id}>
+    //     <span className="venue-name">{loaded.name}</span>
+    //     <div className="venue-info">
+    //       <p className="venue-info">Address: {loaded.location.address}, {loaded.location.city},{loaded.location.state}</p>
+    //       <p className="venue-checkin">Venue Summary: {loaded.hereNow.summary}</p>
+    //       <p className="venue-checkin">Users Checked-in: {loaded.hereNow.count}</p>
+    //     </div>
+    //   </div>
+    // ));
 
     return (
       <div className="feedContainer">
         <div className="searchContainer">
-          <h2>{this.props.name}</h2>
+          <h2>{this.props.name.toUpperCase()}</h2>
           <Form
             handleInputChange={this.props.handleInputChange}
             onFormSubmit={this.props.onFormSubmit}

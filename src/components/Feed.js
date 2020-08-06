@@ -8,8 +8,10 @@ export default class Feed extends Component {
     loadedVenues: []
   };
 
-  componentDidMount() {
+  componentDidMount(props) {
     this.renderVenuesOnLoad();
+    console.log(this.props)
+
   }
 
   renderVenuesOnLoad = () => {
@@ -29,11 +31,10 @@ export default class Feed extends Component {
       });
   };
 
-  componentDidUpdate(props) {
-    let links = document.querySelectorAll(`.leftNavLink`);
-    console.log(links)
-    links.forEach(link => link.className += "" + "active")
-  }
+  // componentDidUpdate(props) {
+  //   let links = document.querySelectorAll(`.leftNavLink`);
+  //   console.log(links)
+  // }
 
   render() {
     let allVenues = this.props.venues.map(venue => (

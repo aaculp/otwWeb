@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // import Home from "./components/Home";
 // import Food from "./components/Food";
@@ -201,7 +201,7 @@ export default class App extends Component {
       <Router>
         <div className="AppContainer">
           <div className="leftBar">
-            <Nav {...this.state} />
+            <Nav {...this.state} inputRef={link => this.inputElement = link} />
 
             <Switch>
               {this.state.routes.map((route, index) => (
@@ -212,7 +212,7 @@ export default class App extends Component {
                 // that requires you to render multiple things
                 // in multiple places at the same URL is nothing
                 // more than multiple <Route>s.
-                <Route key={index} path={route.path} exact={route.exact} />
+                <Route key={index} path={route.path} exact={route.exact} {...this.state} />
               ))}
             </Switch>
           </div>

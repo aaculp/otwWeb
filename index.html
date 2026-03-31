@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnTheWay — OTW</title>
+  <meta name="description" content="Discover spots. Claim deals. Be there. OTW connects you with local bars, restaurants, and nightlife.">
+  <meta name="theme-color" content="#0f0f0f">
+  <link rel="icon" type="image/png" href="app-icon-512.png">
+  <meta property="og:title" content="OnTheWay — OTW">
+  <meta property="og:description" content="Discover spots. Claim deals. Be there.">
+  <meta property="og:image" content="app-icon-512.png">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #f0f0f0;
+      background-color: #0f0f0f;
+    }
+
+    /* Header */
+    .site-header {
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 15, 15, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .header-logo {
+      grid-column: 2;
+      justify-self: center;
+      text-decoration: none;
+      display: block;
+    }
+    .header-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: block;
+    }
+    .menu-toggle {
+      grid-column: 3;
+      justify-self: end;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 20;
+    }
+    .menu-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #888;
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 15, 15, 0.97);
+      z-index: 9;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+    .mobile-nav a:hover { color: #fff; }
+
+    /* Shared */
+    .section { padding: 3rem 1.25rem; }
+    .section-inner { max-width: 960px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .section-subtitle {
+      font-size: 1rem;
+      color: #888;
+      margin-bottom: 2rem;
+    }
+    .bg-dark { background: #0f0f0f; }
+    .bg-mid { background: #141414; }
+    .bg-surface { background: #1a1a1a; }
+
+    /* Hero / Brand */
+    .hero {
+      text-align: center;
+      padding: 3rem 1.25rem 2.5rem;
+    }
+    .hero-logo {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.15rem;
+    }
+    .logo-o { color: #DC2626; }
+    .logo-t { color: #F59E0B; }
+    .logo-w { color: #059669; }
+    .hero-name {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      color: #aaa;
+      font-style: italic;
+      min-height: 1.5em;
+      margin-bottom: 1.5rem;
+      transition: opacity 0.3s ease;
+    }
+    .tagline.fade-out { opacity: 0; }
+    .tagline.fade-in { opacity: 1; }
+    .hero-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2rem;
+    }
+    .store-buttons {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .store-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.15s ease;
+      flex: 1;
+    }
+    .store-btn:active { transform: scale(0.97); }
+    .store-btn svg { flex-shrink: 0; width: 20px; height: 20px; }
+    .store-btn-apple { background: #fff; color: #000; }
+    .store-btn-google { background: #1a1a1a; color: #f0f0f0; border: 1px solid #333; }
+    .store-btn-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.15;
+    }
+    .store-btn-label { font-size: 0.6rem; font-weight: 400; opacity: 0.7; }
+    .store-btn-name { font-size: 0.85rem; font-weight: 600; }
+
+    /* Steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    .step { text-align: center; }
+    .step-icon {
+      font-size: 2rem;
+      color: #F59E0B;
+      margin-bottom: 0.75rem;
+    }
+    .step-icon ion-icon { font-size: 2.25rem; }
+    .step-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+    .step-desc {
+      font-size: 0.9rem;
+      color: #999;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    /* Feature grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .feature-card {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .feature-card ion-icon.feature-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: #999;
+      line-height: 1.5;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .pricing-card {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+    .pricing-card--popular {
+      border: 1px solid #059669;
+    }
+    .pricing-badge {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #059669;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.75rem;
+      border-radius: 20px;
+    }
+    .pricing-icon {
+      font-size: 1.75rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-icon ion-icon { font-size: 2rem; }
+    .pricing-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.15rem;
+    }
+    .pricing-price span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #888;
+    }
+    .pricing-regular {
+      font-size: 0.8rem;
+      color: #666;
+      text-decoration: line-through;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-features {
+      list-style: none;
+      margin-top: 1rem;
+      text-align: left;
+    }
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #bbb;
+      padding: 0.35rem 0;
+    }
+    .pricing-features ion-icon {
+      font-size: 1.1rem;
+      color: #666;
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1.25rem 1.5rem;
+      font-size: 0.8rem;
+      color: #444;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .footer-links a {
+      color: #555;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.15s ease;
+    }
+    .footer-links a:hover { color: #aaa; }
+    footer p { margin-bottom: 0.25rem; }
+    footer a { color: #444; text-decoration: none; }
+    footer a:hover { color: #888; }
+
+    /* Tablet+ */
+    @media (min-width: 600px) {
+      .site-header { padding: 1.25rem 2rem; }
+      .header-logo img { width: 44px; height: 44px; border-radius: 11px; }
+      .hero { padding: 4rem 2rem 3rem; }
+      .hero-logo { font-size: 4rem; }
+      .hero-value { font-size: 1.4rem; }
+      .steps { flex-direction: row; gap: 1.5rem; }
+      .step { flex: 1; }
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Desktop */
+    @media (min-width: 768px) {
+      .site-header { padding: 1.25rem 3rem; }
+      .header-logo img { width: 48px; height: 48px; border-radius: 12px; }
+      .section { padding: 4rem 2rem; }
+      .section-title { font-size: 1.75rem; }
+      .hero-logo { font-size: 4.5rem; }
+    }
+
+    /* Wide */
+    @media (min-width: 1024px) {
+      .pricing-grid { grid-template-columns: repeat(4, 1fr); }
+      .feature-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+</style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="index.html" class="header-logo" aria-label="OTW Home">
+      <img src="app-icon-512.png" alt="OTW">
+    </a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#how-it-works">How It Works</a>
+    <a href="#customers">For You</a>
+    <a href="#venues">For Venues</a>
+    <a href="#pricing">Pricing</a>
+    <a href="legal/privacy-policy.html">Privacy Policy</a>
+    <a href="legal/terms-and-conditions.html">Terms</a>
+    <a href="legal/child-safety-standards.html">Child Safety</a>
+    <a href="legal/delete-account.html">Delete Account</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero bg-dark">
+    <div class="hero-logo">
+      <span class="logo-o">O</span><span class="logo-t">T</span><span class="logo-w">W</span>
+    </div>
+    <p class="tagline" id="tagline">OTW to brunch, hoping they have bottomless mimosas</p>
+    <p class="hero-value">Discover spots. Claim deals. Be there.</p>
+    <div class="store-buttons">
+      <a href="https://apps.apple.com/app/otw" class="store-btn store-btn-apple" aria-label="Download on the App Store">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <span class="store-btn-text"><span class="store-btn-label">Download on the</span><span class="store-btn-name">App Store</span></span>
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.alphacharlie722" class="store-btn store-btn-google" aria-label="Get it on Google Play">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .61-.92zm1.393-.508L15.98 7.28 13.207 12l-8.203-10.694zM5.003 22.694L15.98 16.72 13.207 12l-8.204 10.694zM16.8 7.78L21.6 10.4c.6.34.6 1.2 0 1.54l-4.8 2.62L14.02 12l2.78-4.22z"/></svg>
+        <span class="store-btn-text"><span class="store-btn-label">Get it on</span><span class="store-btn-name">Google Play</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section bg-mid" id="how-it-works">
+    <div class="section-inner" style="text-align:center;">
+      <p class="section-label" style="color:#F59E0B;">How It Works</p>
+      <h2 class="section-title">Three steps to your next spot</h2>
+      <p class="section-subtitle">No sign-up walls. No coupon codes. Just show up.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon"><ion-icon name="search-outline"></ion-icon></div>
+          <h3 class="step-title">Discover</h3>
+          <p class="step-desc">Find bars, restaurants, and nightlife nearby. See real-time activity levels before you go.</p>
+        </div>
+        <div class="step">
+          <div class="step-icon" style="color:#4CAF50;"><ion-icon name="location-outline"></ion-icon></div>
+          <h3 class="step-title">Check In</h3>
+          <p class="step-desc">Check in when you arrive. See who's there. Unlock reviews and deals.</p>
+        </div>
+        <div class="step">
+          <div class="step-icon" style="color:#FF9800;"><ion-icon name="ticket-outline"></ion-icon></div>
+          <h3 class="step-title">Claim</h3>
+          <p class="step-desc">Grab flash offers and get a redemption token. Show it. Save money. Done.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Customers -->
+  <section class="section bg-dark" id="customers">
+    <div class="section-inner">
+      <p class="section-label" style="color:#DC2626;">For You</p>
+      <h2 class="section-title">Your city, your way</h2>
+      <p class="section-subtitle">Find the vibe before you arrive.</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <ion-icon name="pulse-outline" style="color:#FF9800;" class="feature-icon"></ion-icon>
+          <h3>Live Activity</h3>
+          <p>See how busy a spot is right now — from Low-key 😌 to Maxed 🚀</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="flash-outline" style="color:#FF9800;" class="feature-icon"></ion-icon>
+          <h3>Flash Offers</h3>
+          <p>Real deals, real-time. Claim nearby offers and get an instant redemption token.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="hand-left-outline" style="color:#FF9800;" class="feature-icon"></ion-icon>
+          <h3>Nudge</h3>
+          <p>Let venues know you want a deal. They get notified — and they listen.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="star-outline" style="color:#9C27B0;" class="feature-icon"></ion-icon>
+          <h3>VIP Passes</h3>
+          <p>Get exclusive entry passes from your favorite venues, straight to your phone.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="people-outline" style="color:#2196F3;" class="feature-icon"></ion-icon>
+          <h3>Social</h3>
+          <p>Add friends, share collections, see mutual favorites. Go out together.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="create-outline" style="color:#FFC107;" class="feature-icon"></ion-icon>
+          <h3>Reviews</h3>
+          <p>Rate venues, write reviews, and see what others think before you commit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Venue Owners -->
+  <section class="section bg-mid" id="venues">
+    <div class="section-inner">
+      <p class="section-label" style="color:#059669;">For Venue Owners</p>
+      <h2 class="section-title">Turn foot traffic into loyal customers</h2>
+      <p class="section-subtitle">Real analytics. Real engagement. Not vanity metrics.</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <ion-icon name="analytics-outline" style="color:#2196F3;" class="feature-icon"></ion-icon>
+          <h3>Dashboard</h3>
+          <p>Real-time check-ins, favorites, ratings, and activity levels at a glance.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="flash-outline" style="color:#FF9800;" class="feature-icon"></ion-icon>
+          <h3>Flash Offers</h3>
+          <p>Create time-limited deals. Set limits, duration, and geo-target nearby customers.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="notifications-outline" style="color:#2196F3;" class="feature-icon"></ion-icon>
+          <h3>Pulse Notifications</h3>
+          <p>Push notifications to nearby customers. Promote events, happy hours, specials.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="hand-left" style="color:#FF9800;" class="feature-icon"></ion-icon>
+          <h3>Nudge Alerts</h3>
+          <p>See when customers are looking for deals at your venue. Create timely offers.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="star-outline" style="color:#9C27B0;" class="feature-icon"></ion-icon>
+          <h3>VIP Passes</h3>
+          <p>Send exclusive entry passes to loyal customers who favorited your venue.</p>
+        </div>
+        <div class="feature-card">
+          <ion-icon name="create-outline" style="color:#FF6B6B;" class="feature-icon"></ion-icon>
+          <h3>Profile Management</h3>
+          <p>Update hours, add popular items, respond to reviews, manage your gallery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section bg-dark" id="pricing">
+    <div class="section-inner" style="text-align:center;">
+      <p class="section-label" style="color:#F59E0B;">Founders Pricing</p>
+      <h2 class="section-title">Lock in 50% off forever</h2>
+      <p class="section-subtitle">Only 50 spots at founders pricing. Once they're gone, they're gone.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-icon"><ion-icon name="gift-outline"></ion-icon></div>
+          <h3>Free</h3>
+          <p class="pricing-price">$0<span>/mo</span></p>
+          <ul class="pricing-features">
+            <li><ion-icon name="flash-outline"></ion-icon> 5 Flash Offers</li>
+            <li><ion-icon name="notifications-outline"></ion-icon> 5 Pulse Notifications</li>
+            <li><ion-icon name="star-outline"></ion-icon> 10 VIP Passes</li>
+          </ul>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-icon" style="color:#2196F3;"><ion-icon name="rocket-outline"></ion-icon></div>
+          <h3>Starter</h3>
+          <p class="pricing-price">$49<span>/mo</span></p>
+          <p class="pricing-regular">Regular $99/mo</p>
+          <ul class="pricing-features">
+            <li><ion-icon name="flash-outline"></ion-icon> 30 Flash Offers</li>
+            <li><ion-icon name="notifications-outline"></ion-icon> 30 Pulse Notifications</li>
+            <li><ion-icon name="star-outline"></ion-icon> 30 VIP Passes</li>
+          </ul>
+        </div>
+        <div class="pricing-card pricing-card--popular">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-icon" style="color:#059669;"><ion-icon name="trending-up-outline"></ion-icon></div>
+          <h3>Growth</h3>
+          <p class="pricing-price">$99<span>/mo</span></p>
+          <p class="pricing-regular">Regular $199/mo</p>
+          <ul class="pricing-features">
+            <li><ion-icon name="flash-outline"></ion-icon> 50 Flash Offers</li>
+            <li><ion-icon name="notifications-outline"></ion-icon> 50 Pulse Notifications</li>
+            <li><ion-icon name="star-outline"></ion-icon> 50 VIP Passes</li>
+          </ul>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-icon" style="color:#9C27B0;"><ion-icon name="infinite-outline"></ion-icon></div>
+          <h3>Unlimited</h3>
+          <p class="pricing-price">$199<span>/mo</span></p>
+          <p class="pricing-regular">Regular $399/mo</p>
+          <ul class="pricing-features">
+            <li><ion-icon name="flash-outline"></ion-icon> Unlimited Flash Offers</li>
+            <li><ion-icon name="notifications-outline"></ion-icon> Unlimited Pulse</li>
+            <li><ion-icon name="star-outline"></ion-icon> Unlimited VIP Passes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section bg-mid" id="cta" style="text-align:center;">
+    <div class="section-inner">
+      <h2 class="section-title" style="font-size:1.75rem; margin-bottom:0.75rem;">Ready to find your next spot?</h2>
+      <p class="section-subtitle" style="margin-bottom:2rem;">Join the first 50 venues or start discovering today.</p>
+      <div class="store-buttons" style="margin:0 auto;">
+        <a href="https://apps.apple.com/app/otw" class="store-btn store-btn-apple" aria-label="Download on the App Store">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <span class="store-btn-text"><span class="store-btn-label">Download on the</span><span class="store-btn-name">App Store</span></span>
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=com.alphacharlie722" class="store-btn store-btn-google" aria-label="Get it on Google Play">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .61-.92zm1.393-.508L15.98 7.28 13.207 12l-8.203-10.694zM5.003 22.694L15.98 16.72 13.207 12l-8.204 10.694zM16.8 7.78L21.6 10.4c.6.34.6 1.2 0 1.54l-4.8 2.62L14.02 12l2.78-4.22z"/></svg>
+          <span class="store-btn-text"><span class="store-btn-label">Get it on</span><span class="store-btn-name">Google Play</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="legal/privacy-policy.html">Privacy Policy</a>
+      <a href="legal/terms-and-conditions.html">Terms &amp; Conditions</a>
+      <a href="legal/child-safety-standards.html">Child Safety</a>
+      <a href="legal/delete-account.html">Delete Account</a>
+    </div>
+    <p>&copy; 2026 OnTheWay. All rights reserved.</p>
+    <p><a href="mailto:support@otwapp.com">support@otwapp.com</a></p>
+  </footer>
+
+  <script>
+    (function() {
+      // Mobile menu
+      var toggle = document.querySelector('.menu-toggle');
+      var mobileNav = document.getElementById('mobileNav');
+      toggle.addEventListener('click', function() {
+        var isOpen = mobileNav.classList.toggle('open');
+        toggle.classList.toggle('active');
+        toggle.setAttribute('aria-expanded', isOpen);
+        toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+      // Close mobile nav on anchor click
+      mobileNav.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          mobileNav.classList.remove('open');
+          toggle.classList.remove('active');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', 'Open menu');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // Rotating taglines
+      var phrases = [
+        "OTW to the gym, crush those goals",
+        "OTW to brunch, hoping they have bottomless mimosas",
+        "OTW to the coffee shop, need that caffeine fix",
+        "OTW to happy hour, time to unwind",
+        "OTW to dinner, heard this place is amazing",
+        "OTW to the movies, hope we get good seats",
+        "OTW to the mall, retail therapy time",
+        "OTW to lunch, craving something delicious",
+        "OTW to the beach, sun and waves await",
+        "OTW to coffee, barely awake",
+        "OTW to the gym, no excuses today",
+        "OTW to drinks, long day energy",
+        "OTW to dinner, fingers crossed it's worth the wait",
+        "OTW, vibes TBD"
+      ];
+      var el = document.getElementById('tagline');
+      el.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      setInterval(function() {
+        el.classList.add('fade-out');
+        el.classList.remove('fade-in');
+        setTimeout(function() {
+          el.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+          el.classList.remove('fade-out');
+          el.classList.add('fade-in');
+        }, 300);
+      }, 3000);
+    })();
+  </script>
+</body>
+</html>

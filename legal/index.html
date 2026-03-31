@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTW — On The Way</title>
+  <link rel="icon" type="image/png" href="../app-icon-512.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.7;
+      color: #f0f0f0;
+      background-color: #0f0f0f;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      padding: 2.5rem 1.25rem;
+      text-align: center;
+    }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.25rem;
+    }
+    .logo-o { color: #DC2626; }
+    .logo-t { color: #F59E0B; }
+    .logo-w { color: #059669; }
+    .tagline {
+      font-size: 0.95rem;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 2rem;
+      min-height: 1.5em;
+      transition: opacity 0.25s ease;
+    }
+    .tagline.fade-out { opacity: 0; }
+    .tagline.fade-in { opacity: 1; }
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    p {
+      margin-bottom: 1rem;
+      color: #aaa;
+      font-size: 1rem;
+    }
+    .message-box {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (min-width: 600px) {
+      body { padding: 2rem 1rem; }
+      .container {
+        background: #1a1a1a;
+        border-radius: 16px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      }
+      .message-box {
+        background: #222;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <span class="logo-o">O</span><span class="logo-t">T</span><span class="logo-w">W</span>
+    </div>
+    <p class="tagline" id="tagline">OTW to the gym, crush those goals</p>
+
+    <div id="content">
+      <div class="icon">✅</div>
+      <h1 id="title">You're all set!</h1>
+      <div class="message-box">
+        <p id="message">Your email has been confirmed. You can close this page and head back to the OTW app.</p>
+      </div>
+      <p style="font-size: 0.85rem; color: #666;">If the app doesn't open automatically, just open OTW from your home screen.</p>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var phrases = [
+        "OTW to the gym, crush those goals",
+        "OTW to brunch, hoping they have bottomless mimosas",
+        "OTW to the coffee shop, need that caffeine fix",
+        "OTW to happy hour, time to unwind",
+        "OTW to dinner, heard this place is amazing",
+        "OTW to the movies, hope we get good seats",
+        "OTW to the mall, retail therapy time",
+        "OTW to lunch, craving something delicious",
+        "OTW to the beach, sun and waves await",
+        "OTW to coffee, barely awake",
+        "OTW to the gym, no excuses today",
+        "OTW to drinks, long day energy",
+        "OTW to dinner, fingers crossed it's worth the wait",
+        "OTW, vibes TBD"
+      ];
+
+      var taglineEl = document.getElementById('tagline');
+      taglineEl.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+
+      setInterval(function() {
+        taglineEl.classList.add('fade-out');
+        taglineEl.classList.remove('fade-in');
+        setTimeout(function() {
+          taglineEl.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+          taglineEl.classList.remove('fade-out');
+          taglineEl.classList.add('fade-in');
+        }, 250);
+      }, 1500);
+
+      var params = new URLSearchParams(window.location.search);
+      var hash = window.location.hash.substring(1);
+      var hashParams = new URLSearchParams(hash);
+
+      var type = params.get('type') || hashParams.get('type') || '';
+      var error = params.get('error') || hashParams.get('error') || '';
+      var errorDescription = params.get('error_description') || hashParams.get('error_description') || '';
+
+      var titleEl = document.getElementById('title');
+      var messageEl = document.getElementById('message');
+      var iconEl = document.querySelector('.icon');
+
+      if (error) {
+        iconEl.textContent = '⚠️';
+        titleEl.textContent = 'Something went wrong';
+        messageEl.textContent = errorDescription || 'There was a problem processing your request. Please try again from the OTW app.';
+      } else if (type === 'signup' || type === 'email_confirmation') {
+        iconEl.textContent = '✅';
+        titleEl.textContent = 'Email confirmed!';
+        messageEl.textContent = 'Your email has been verified. Head back to the OTW app and log in to get started.';
+      } else if (type === 'recovery' || type === 'password_recovery') {
+        iconEl.textContent = '🔑';
+        titleEl.textContent = 'Reset your password';
+        messageEl.textContent = 'Open the OTW app to set your new password. This link has been verified.';
+      } else if (type === 'magiclink') {
+        iconEl.textContent = '✨';
+        titleEl.textContent = 'Magic link verified!';
+        messageEl.textContent = 'You\'re signed in. Head back to the OTW app to continue.';
+      } else if (type === 'invite') {
+        iconEl.textContent = '🎉';
+        titleEl.textContent = 'Invitation accepted!';
+        messageEl.textContent = 'Welcome to OTW! Open the app to set up your account.';
+      }
+    })();
+  </script>
+</body>
+</html>

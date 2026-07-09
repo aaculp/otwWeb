@@ -600,20 +600,18 @@ footer{padding:44px 0;border-top:2px solid var(--line-strong);}
     try {
       const { data, error } = await supabase
         .from('venue_activities')
-        .select('title, activity_type, start_time_local, day_of_week, recurrence_type, venues!inner(name, neighborhood)')
+        .select('title, activity_type, start_time_local, day_of_week, recurrence_type, one_off_date, venues!inner(name, neighborhood)')
         .eq('status', 'approved')
         .order('start_time_local', { ascending: true });
 
       if(error) throw error;
 
       // Filter to today's activities
+      const todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
       const tonightItems = (data || []).filter(item => {
         if(item.recurrence_type === 'daily') return true;
         if(item.recurrence_type === 'weekly' && item.day_of_week && item.day_of_week.includes(todayDow)) return true;
-        if(item.recurrence_type === 'one_off'){
-          // one-off items show if they don't have a specific day filter
-          return true;
-        }
+        if(item.recurrence_type === 'one_off' && item.one_off_date === todayStr) return true;
         return false;
       }).slice(0, 6);
 

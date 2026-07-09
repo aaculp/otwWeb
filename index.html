@@ -584,8 +584,9 @@ footer{padding:44px 0;border-top:2px solid var(--line-strong);}
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const today = new Date();
-  const todayDow = today.getDay(); // 0=Sun
+  // Use Eastern time (Columbus) to determine today's day of week
+  const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const todayDow = nowET.getDay(); // 0=Sun, 1=Mon, ... 4=Thu, etc.
 
   function formatTime(timeStr){
     if(!timeStr) return '';
@@ -607,7 +608,7 @@ footer{padding:44px 0;border-top:2px solid var(--line-strong);}
       if(error) throw error;
 
       // Filter to today's activities
-      const todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
+      const todayStr = nowET.getFullYear() + '-' + String(nowET.getMonth()+1).padStart(2,'0') + '-' + String(nowET.getDate()).padStart(2,'0');
       const tonightItems = (data || []).filter(item => {
         if(item.recurrence_type === 'daily') return true;
         if(item.recurrence_type === 'weekly' && item.day_of_week && item.day_of_week.includes(todayDow)) return true;
